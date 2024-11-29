@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>05 - 이벤트 처리</title>
+    <script>
+        // 마우스 이벤트 예제를 실행하는 함수
+        const runMouseExample = () => {
+            const mouseCode = `
+                // 마우스 이벤트 처리를 위한 DOM 요소 선택
+                const demoArea = document.getElementById('mouseDemo');
+
+                // 박스 요소 생성 및 스타일링
+                const box = document.createElement('div');
+                box.className = 'box';  // CSS 클래스 적용
+                demoArea.appendChild(box);
+
+                // 마우스 위치 표시 영역 생성
+                const positionDisplay = document.createElement('div');
+                demoArea.appendChild(positionDisplay);
+
+                // mouseenter 이벤트: 요소에 마우스가 진입할 때 발생
+                box.addEventListener('mouseenter', () => {
+                    console.log('마우스 진입');
+                    // transform을 사용한 확대 효과
+                    box.style.transform = 'scale(1.1)';
+                });
+
+                // mouseleave 이벤트: 요소에서 마우스가 벗어날 때 발생
+                box.addEventListener('mouseleave', () => {
+                    console.log('마우스 이탈');
+                    // 원래 크기로 복귀
+                    box.style.transform = 'scale(1)';
+                });
+
+                // click 이벤트: 요소를 클릭할 때 발생
+                box.addEventListener('click', () => {
+                    console.log('클릭');
+                    // 랜덤 배경색 적용
+                    box.style.background = getRandomColor();
+                });
+
+                // mousemove 이벤트: 마우스가 움직일 때마다 발생
+                demoArea.addEventListener('mousemove', (e) => {
+                    // getBoundingClientRect: 요소의 크기와 위치 정보를 반환
+                    const rect = demoArea.getBoundingClientRect();
+                    // 요소 내부에서의 상대적 마우스 위치 계산
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    positionDisplay.textContent = \`X: \${Math.round(x)}, Y: \${Math.round(y)}\`;
+                });
+
+                // 랜덤 색상 생성 함수
+                function getRandomColor() {
+                    const letters = '0123456789ABCDEF';
+                    let color = '#';
+                    // 6자리 16진수 색상 코드 생성
+                    for (let i = 0; i < 6; i++) {
+                        color += letters[Math.floor(Math.random() * 16)];
+                    }
+                    return color;
+                }
+            `;
+            runCode('mouseCode', 'mouseOutput', 'mouseDemo', mouseCode);
+        };
+
+        // 키보드 이벤트 예제를 실행하는 함수
+        const runKeyboardExample = () => {
+            const keyboardCode = `
+                // 키보드 이벤트 처리를 위한 DOM 요소 선택
+                const demoArea = document.getElementById('keyboardDemo');
+
+                // 입력 필드 생성 및 설정
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = '여기에 입력하세요';
+                input.style.width = '200px';
+                input.style.padding = '5px';
+                demoArea.appendChild(input);
+
+                // 결과 표시 영역 생성
+                const display = document.createElement('div');
+                display.style.marginTop = '10px';
+                demoArea.appendChild(display);
+
+                // keydown 이벤트: 키를 누를 때 발생
+                input.addEventListener('keydown', (e) => {
+                    console.log('keydown:', e.key);
+                    display.textContent = \`마지막 키: \${e.key} (코드: \${e.code})\`;
+                });
+
+                // input 이벤트: 입력 값이 변경될 때 발생
+                input.addEventListener('input', (e) => {
+                    console.log('입력값:', e.target.value);
+                });
+
+                // 특수 키 조합 처리 (전역 이벤트)
+                document.addEventListener('keydown', (e) => {
+                    // Ctrl+S 조합 감지
+                    if (e.ctrlKey && e.key === 's') {
+                        e.preventDefault();  // 브라우저 기본 동작 방지
+                        console.log('Ctrl+S 감지!');
+                        display.textContent = 'Ctrl+S가 눌렸습니다!';
+                    }
+                });
+            `;
+            runCode('keyboardCode', 'keyboardOutput', 'keyboardDemo', keyboardCode);
+        };
+
+        // 드래그 앤 드롭 예제를 실행하는 함수
+        const runDragExample = () => {
+            const dragCode = `
+                // 드래그 앤 드롭을 위한 DOM 요소 선택
+                const demoArea = document.getElementById('dragDemo');
+
+                // 드래그 가능한 요소 생성
+                const draggable = document.createElement('div');
+                draggable.className = 'box draggable';
+                draggable.textContent = '드래그';
+                draggable.draggable = true;  // 드래그 가능 속성 설정
+                demoArea.appendChild(draggable);
+
+                // 드롭 영역 생성
+                const dropZone = document.createElement('div');
+                dropZone.className = 'drop-zone';
+                dropZone.textContent = '여기에 드롭하세요';
+                demoArea.appendChild(dropZone);
+
+                // dragstart 이벤트: 드래그 시작 시 발생
+                draggable.addEventListener('dragstart', (e) => {
+                    console.log('드래그 시작');
+                    e.target.style.opacity = '0.5';  // 드래그 중 투명도 변경
+                    // 드래그 데이터 설정
+                    e.dataTransfer.setData('text/plain', 'dragged-box');
+                });
+
+                // dragend 이벤트: 드래그 종료 시 발생
+                draggable.addEventListener('dragend', (e) => {
+                    console.log('드래그 종료');
+                    e.target.style.opacity = '1';  // 투명도 복구
+                });
+
+                // dragover 이벤트: 드래그한 요소가 드롭 영역 위에 있을 때
+                dropZone.addEventListener('dragover', (e) => {
+                    e.preventDefault();  // 기본 동작 방지 (드롭 허용)
+                    dropZone.classList.add('active');  // 시각적 피드백
+                });
+
+                // dragleave 이벤트: 드래그한 요소가 드롭 영역을 벗어날 때
+                dropZone.addEventListener('dragleave', () => {
+                    dropZone.classList.remove('active');  // 시각적 피드백 제거
+                });
+
+                // drop 이벤트: 요소를 드롭했을 때
+                dropZone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove('active');
+                    
+                    // 드래그 데이터 확인
+                    const data = e.dataTransfer.getData('text/plain');
+                    if (data === 'dragged-box') {
+                        dropZone.appendChild(draggable);  // 요소 이동
+                        console.log('드롭 완료!');
+                    }
+                });
+            `;
+            runCode('dragCode', 'dragOutput', 'dragDemo', dragCode);
+        };
+
+        // 코드 실행을 위한 유틸리티 함수
+        function runCode(codeId, outputId, demoId, code) {
+            const output = document.getElementById(outputId);
+            const demo = document.getElementById(demoId);
+            
+            output.innerHTML = '';
+            demo.innerHTML = '';
+
+            // 콘본 console 함수들 보관
+            const originalLog = console.log;
+            const logs = [];
+            
+            // console.log 함수 재정의
+            console.log = function(...args) {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg) : arg
+                ).join(' '));
+                originalLog.apply(console, args);
+            };
+
+            try {
+                // 코드 실행
+                new Function(code)();
+                // 결과 표시
+                output.innerHTML = logs.join('<br>');
+            } catch (error) {
+                output.innerHTML = `<span class="error">❌ ${error.message}</span>`;
+            } finally {
+                // console.log 복구
+                console.log = originalLog;
+            }
+        }
+
+        // DOM 로드 완료 후 예제 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            runMouseExample();
+            runKeyboardExample();
+            runDragExample();
+        });
+    </script>
+    <style>
+        body { 
+            font-family: 'Segoe UI', sans-serif; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 20px;
+        }
+        .example { 
+            margin: 20px 0; 
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .code-area {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .code-editor {
+            width: 100%;
+            height: 200px;
+            font-family: monospace;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .controls {
+            margin: 10px 0;
+        }
+        .output {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+        .demo-area {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            min-height: 100px;
+            background: #fff;
+        }
+        .error { color: #dc3545; }
+        
+        /* 이벤트 데모를 위한 추가 스타일 */
+        .highlight { background: yellow; }
+        .box {
+            width: 100px;
+            height: 100px;
+            background: #007bff;
+            margin: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .box:hover {
+            background: #0056b3;
+        }
+        .draggable {
+            cursor: move;
+            user-select: none;
+        }
+        .drop-zone {
+            border: 2px dashed #ccc;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 100px;
+        }
+        .drop-zone.active {
+            border-color: #28a745;
+            background: #e9ffef;
+        }
+    </style>
+</head>
+<body>
+    <h1>05 - 이벤트 처리</h1>
+    <p>마우스, 키보드, 폼 이벤트 처리와 이벤트 위임을 실습해봅니다.</p>
+
+    <div class="example">
+        <h2>1. 마우스 이벤트</h2>
+        <div class="code-area">
+            <div id="mouseDemo" class="demo-area"></div>
+            <div id="mouseOutput" class="output"></div>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>2. 키보드 이벤트</h2>
+        <div class="code-area">
+            <div id="keyboardDemo" class="demo-area"></div>
+            <div id="keyboardOutput" class="output"></div>
+        </div>
+    </div>
+
+    <div class="example">
+        <h2>3. 드래그 앤 드롭</h2>
+        <div class="code-area">
+            <div id="dragDemo" class="demo-area"></div>
+            <div id="dragOutput" class="output"></div>
+        </div>
+    </div>
+</body>
+</html> 

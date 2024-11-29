@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery 종합 예제</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/plugin.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/plugins/jquery.bxslider.min.js"></script>
+    <script src="./js/plugins/jquery.cookie.js"></script>
+    <script>
+        $(function() {
+            // 1. 선택자 및 DOM 조작
+            $("#btn1").click(function(){
+                $("#text1").html("<strong>HTML 변경</strong>");
+                $("#text2").text("텍스트 변경");
+                $("#box").css({
+                    "background-color": "#ff0",
+                    "border": "2px solid #f00"
+                });
+            });
+
+            // 2. 이벤트 처리
+            $("#mouseArea").on({
+                mouseenter: function(){
+                    $(this).css("background", "#f0f0f0");
+                },
+                mouseleave: function(){
+                    $(this).css("background", "#ffffff");
+                },
+                click: function(e){
+                    $("#coordinates").text(`X: ${e.pageX}, Y: ${e.pageY}`);
+                }
+            });
+
+            // 3. 폼 처리
+            $("#registForm").submit(function(e){
+                e.preventDefault();
+                let isValid = true;
+                let errorMsg = [];
+
+                let email = $("#email").val();
+                let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if(!emailRegex.test(email)) {
+                    errorMsg.push("올바른 이메일 형식이 아닙니다.");
+                    isValid = false;
+                }
+
+                if(isValid) {
+                    $("#successMsg").show().text("등록이 완료되었습니다!");
+                    $("#errorMsg").hide();
+                } else {
+                    $("#errorMsg").show().html(errorMsg.join("<br>"));
+                    $("#successMsg").hide();
+                }
+            });
+
+            // 4. Ajax 처리
+            $("#getDataBtn").click(function() {
+                $.ajax({
+                    url: "https://api.example.com/data",
+                    method: "GET",
+                    dataType: "json",
+                    success: function(response) {
+                        $("#result").html(JSON.stringify(response, null, 2));
+                    },
+                    error: function(xhr, status, error) {
+                        $("#error").html("에러 발생: " + error);
+                    }
+                });
+            });
+
+            // 5. 플러그인
+            // bxSlider 초기화
+            $('.bxslider').bxSlider({
+                mode: 'fade',
+                captions: true,
+                auto: true,
+                pause: 3000,
+                controls: true,
+                pager: true
+            });
+
+            // 쿠키 플러그인
+            $("#setCookie").click(function() {
+                $.cookie('userPreference', 'darkMode', { expires: 7 });
+                $("#cookieStatus").text($.cookie('userPreference') || "쿠키 없음");
+            });
+
+            // 커스텀 하이라이트 플러그인
+            $.fn.highlight = function(options) {
+                let settings = $.extend({
+                    color: '#ffff00',
+                    duration: 1000
+                }, options);
+
+                return this.each(function() {
+                    $(this)
+                        .css('background-color', settings.color)
+                        .delay(settings.duration)
+                        .queue(function(next) {
+                            $(this).css('background-color', '');
+                            next();
+                        });
+                });
+            };
+
+            $("#highlightBtn").click(function() {
+                $(".highlight-text").highlight({
+                    color: '#90EE90',
+                    duration: 2000
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>jQuery 종합 예제</h1>
+
+        <!-- 1. DOM 조작 섹션 -->
+        <section>
+            <h2>DOM 조작</h2>
+            <div id="text1">원본 HTML</div>
+            <div id="text2">원본 텍스트</div>
+            <div id="box">스타일 변경 대상</div>
+            <button id="btn1">내용 변경</button>
+        </section>
+
+        <!-- 2. 이벤트 처리 섹션 -->
+        <section>
+            <h2>이벤트 처리</h2>
+            <div id="mouseArea">
+                마우스를 올려보세요
+            </div>
+            <p id="coordinates"></p>
+        </section>
+
+        <!-- 3. 폼 처리 섹션 -->
+        <section>
+            <h2>폼 처리</h2>
+            <form id="registForm">
+                <div class="form-group">
+                    <label>이메일:</label>
+                    <input type="email" id="email" required>
+                </div>
+                <button type="submit">등록</button>
+            </form>
+            <div id="successMsg" style="display:none;color:green;"></div>
+            <div id="errorMsg" style="display:none;color:red;"></div>
+        </section>
+
+        <!-- 4. Ajax 섹션 -->
+        <section>
+            <h2>Ajax 처리</h2>
+            <button id="getDataBtn">데이터 가져오기</button>
+            <pre id="result"></pre>
+            <div id="error"></div>
+        </section>
+
+        <!-- 5. 플러그인 섹션 -->
+        <section>
+            <h2>플러그인</h2>
+            <!-- bxSlider -->
+            <div class="slider-container">
+                <ul class="bxslider">
+                    <li><img src="./images/slide1.jpg" title="슬라이드 1"></li>
+                    <li><img src="./images/slide2.jpg" title="슬라이드 2"></li>
+                    <li><img src="./images/slide3.jpg" title="슬라이드 3"></li>
+                </ul>
+            </div>
+            <!-- 쿠키 -->
+            <div class="cookie-test">
+                <button id="setCookie">쿠키 설정</button>
+                <div id="cookieStatus"></div>
+            </div>
+            <!-- 하이라이트 -->
+            <div class="highlight-test">
+                <p class="highlight-text">이 텍스트를 하이라이트 해보세요!</p>
+                <button id="highlightBtn">하이라이트 효과</button>
+            </div>
+        </section>
+    </div>
+</body>
+</html> 

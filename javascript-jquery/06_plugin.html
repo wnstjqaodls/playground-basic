@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery 플러그인</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/plugin.css">
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/plugins/jquery.bxslider.min.js"></script>
+    <script src="./js/plugins/jquery.cookie.js"></script>
+    <script>
+        $(function() {
+            // 1. bxSlider 초기화
+            $('.bxslider').bxSlider({
+                mode: 'fade',
+                captions: true,
+                auto: true,
+                pause: 3000,
+                controls: true,
+                pager: true
+            });
+
+            // 2. 쿠키 플러그인 활용
+            $("#setCookie").click(function() {
+                $.cookie('userPreference', 'darkMode', { expires: 7 });
+                updateCookieStatus();
+            });
+
+            $("#getCookie").click(function() {
+                updateCookieStatus();
+            });
+
+            $("#removeCookie").click(function() {
+                $.removeCookie('userPreference');
+                updateCookieStatus();
+            });
+
+            function updateCookieStatus() {
+                let cookieValue = $.cookie('userPreference');
+                $("#cookieStatus").text(cookieValue || "쿠키 없음");
+            }
+
+            // 3. 커스텀 플러그인 정의
+            $.fn.highlight = function(options) {
+                let settings = $.extend({
+                    color: '#ffff00',
+                    duration: 1000
+                }, options);
+
+                return this.each(function() {
+                    $(this)
+                        .css('background-color', settings.color)
+                        .delay(settings.duration)
+                        .queue(function(next) {
+                            $(this).css('background-color', '');
+                            next();
+                        });
+                });
+            };
+
+            // 커스텀 플러그인 사용
+            $("#highlightBtn").click(function() {
+                $(".highlight-text").highlight({
+                    color: '#90EE90',
+                    duration: 2000
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>jQuery 플러그인 데모</h2>
+        <!-- bxSlider -->
+        <div class="slider-container">
+            <ul class="bxslider">
+                <li><img src="./images/slide1.jpg" title="슬라이드 1"></li>
+                <li><img src="./images/slide2.jpg" title="슬라이드 2"></li>
+                <li><img src="./images/slide3.jpg" title="슬라이드 3"></li>
+            </ul>
+        </div>
+        <!-- 쿠키 테스트 -->
+        <div class="cookie-test">
+            <button id="setCookie">쿠키 설정</button>
+            <button id="getCookie">쿠키 확인</button>
+            <button id="removeCookie">쿠키 삭제</button>
+            <div id="cookieStatus"></div>
+        </div>
+        <!-- 커스텀 플러그인 테스트 -->
+        <div class="highlight-test">
+            <p class="highlight-text">이 텍스트를 하이라이트 해보세요!</p>
+            <button id="highlightBtn">하이라이트 효과</button>
+        </div>
+    </div>
+</body>
+</html>

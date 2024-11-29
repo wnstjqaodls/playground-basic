@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바스크립트 기초</title>
+</head>
+<body>
+    <h1>자바스크립트 기초</h1>
+
+    <!-- 변수와 데이터 타입 섹션 -->
+    <div class="section">
+        <h2>1. 변수와 데이터 타입</h2>
+        <div class="explanation">
+            자바스크립트의 기본적인 변수 선언 방식과 데이터 타입을 알아봅니다.
+            var, let, const의 차이점과 각 데이터 타입의 특징을 이해합니다.
+        </div>
+        <div class="sub-section">
+            <h3>1.1 변수 선언</h3>
+            <div class="explanation">
+                var, let, const의 차이점과 스코프를 설명합니다.
+            </div>
+            <button onclick="runVariableExample()">변수 예제 실행</button>
+            <div id="variableOutput" class="output"></div>
+        </div>
+        <div class="sub-section">
+            <h3>1.2 데이터 타입</h3>
+            <div class="explanation">
+                숫자, 문자열, 불리언, null, undefined, 객체, 배열 등 기본 데이터 타입을 살펴봅니다.
+            </div>
+            <button onclick="runDataTypeExample()">데이터 타입 예제 실행</button>
+            <div id="dataTypeOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 연산자 섹션 -->
+    <div class="section">
+        <h2>2. 연산자</h2>
+        <div class="explanation">
+            산술, 비교, 논리 연산자 등 다양한 연산자의 사용법을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>2.1 산술 연산자</h3>
+            <div class="explanation">
+                +, -, *, /, %, ** 등의 기본적인 산술 연산자를 살펴봅니다.
+            </div>
+            <button onclick="runArithmeticExample()">산술 연산자 예제 실행</button>
+            <div id="arithmeticOutput" class="output"></div>
+        </div>
+        <div class="sub-section">
+            <h3>2.2 비교 및 논리 연산자</h3>
+            <div class="explanation">
+                ==, ===, !=, !==, &&, || 등의 비교 및 논리 연산자를 알아봅니다.
+            </div>
+            <button onclick="runComparisonExample()">비교 연산자 예제 실행</button>
+            <div id="comparisonOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 제어문 섹션 -->
+    <div class="section">
+        <h2>3. 제어문</h2>
+        <div class="explanation">
+            조건문과 반복문을 사용하여 코드의 흐름을 제어하는 방법을 배웁니다.
+        </div>
+        <div class="sub-section">
+            <h3>3.1 조건문</h3>
+            <div class="explanation">
+                if, else if, else, switch 문의 사용법을 알아봅니다.
+            </div>
+            <button onclick="runConditionExample()">조건문 예제 실행</button>
+            <div id="conditionOutput" class="output"></div>
+        </div>
+        <div class="sub-section">
+            <h3>3.2 반복문</h3>
+            <div class="explanation">
+                for, while, do-while 등 다양한 반복문의 사용법을 살펴봅니다.
+            </div>
+            <button onclick="runLoopExample()">반복문 예제 실행</button>
+            <div id="loopOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 출력 함수 - 결과를 화면에 표시
+         * @param {string} outputId - 출력할 div의 ID
+         * @param {string} text - 출력할 텍스트
+         * @param {boolean} isError - 에러 여부 (true면 빨간색으로 표시)
+         */
+        function appendToOutput(outputId, text, isError = false) {
+            const output = document.getElementById(outputId);
+            const line = document.createElement('div');
+            line.style.color = isError ? 'red' : 'black';
+            line.textContent = text;
+            output.appendChild(line);
+        }
+
+        /**
+         * 변수 선언 예제
+         * var, let, const의 차이점과 스코프를 설명합니다.
+         */
+        function runVariableExample() {
+            const output = document.getElementById('variableOutput');
+            output.innerHTML = '';
+
+            // var 예제 (함수 스코프)
+            appendToOutput('variableOutput', '1. var 변수 예제:');
+            var x = 10;
+            appendToOutput('variableOutput', `var x = ${x}`);
+            {
+                var x = 20; // 같은 변수를 덮어씀
+                appendToOutput('variableOutput', `블록 내부 var x = ${x}`);
+            }
+            appendToOutput('variableOutput', `블록 외부 var x = ${x}\n`); // 20
+
+            // let 예제 (블록 스코프)
+            appendToOutput('variableOutput', '2. let 변수 예제:');
+            let y = 10;
+            appendToOutput('variableOutput', `let y = ${y}`);
+            {
+                let y = 20; // 새로운 변수 생성
+                appendToOutput('variableOutput', `블록 내부 let y = ${y}`);
+            }
+            appendToOutput('variableOutput', `블록 외부 let y = ${y}\n`); // 10
+
+            // const 예제 (상수)
+            appendToOutput('variableOutput', '3. const 상수 예제:');
+            const z = 10;
+            appendToOutput('variableOutput', `const z = ${z}`);
+            try {
+                z = 20; // 에러 발생
+            } catch (error) {
+                appendToOutput('variableOutput', '상수는 재할당할 수 없습니다.', true);
+            }
+        }
+
+        /**
+         * 데이터 타입 예제
+         * 자바스크립트의 기본 데이터 타입들을 살펴봅니다.
+         */
+        function runDataTypeExample() {
+            const output = document.getElementById('dataTypeOutput');
+            output.innerHTML = '';
+
+            // 숫자형
+            appendToOutput('dataTypeOutput', '1. 숫자형(Number):');
+            const num = 42;
+            const float = 3.14;
+            appendToOutput('dataTypeOutput', `정수: ${num}, 타입: ${typeof num}`);
+            appendToOutput('dataTypeOutput', `실수: ${float}, 타입: ${typeof float}\n`);
+
+            // 문자열
+            appendToOutput('dataTypeOutput', '2. 문자열(String):');
+            const str = "Hello, World!";
+            appendToOutput('dataTypeOutput', `문자열: ${str}, 타입: ${typeof str}\n`);
+
+            // 불리언
+            appendToOutput('dataTypeOutput', '3. 불리언(Boolean):');
+            const bool = true;
+            appendToOutput('dataTypeOutput', `불리언: ${bool}, 타입: ${typeof bool}\n`);
+
+            // null과 undefined
+            appendToOutput('dataTypeOutput', '4. null과 undefined:');
+            const nullVar = null;
+            let undefinedVar;
+            appendToOutput('dataTypeOutput', `null: ${nullVar}, 타입: ${typeof nullVar}`);
+            appendToOutput('dataTypeOutput', `undefined: ${undefinedVar}, 타입: ${typeof undefinedVar}\n`);
+
+            // 객체
+            appendToOutput('dataTypeOutput', '5. 객체(Object):');
+            const obj = { name: "John", age: 30 };
+            appendToOutput('dataTypeOutput', `객체: ${JSON.stringify(obj)}, 타입: ${typeof obj}\n`);
+
+            // 배열
+            appendToOutput('dataTypeOutput', '6. 배열(Array):');
+            const arr = [1, 2, 3, 4, 5];
+            appendToOutput('dataTypeOutput', `배열: ${JSON.stringify(arr)}, 타입: ${typeof arr}`);
+            appendToOutput('dataTypeOutput', `배열 여부: ${Array.isArray(arr)}`);
+        }
+
+        /**
+         * 산술 연산자 예제
+         * 기본적인 수학 연산자들의 사용법을 보여줍니다.
+         */
+        function runArithmeticExample() {
+            const output = document.getElementById('arithmeticOutput');
+            output.innerHTML = '';
+
+            const a = 10;
+            const b = 3;
+
+            appendToOutput('arithmeticOutput', '기본 산술 연산:');
+            appendToOutput('arithmeticOutput', `덧셈: ${a} + ${b} = ${a + b}`);
+            appendToOutput('arithmeticOutput', `뺄셈: ${a} - ${b} = ${a - b}`);
+            appendToOutput('arithmeticOutput', `곱셈: ${a} * ${b} = ${a * b}`);
+            appendToOutput('arithmeticOutput', `나눗셈: ${a} / ${b} = ${a / b}`);
+            appendToOutput('arithmeticOutput', `나머지: ${a} % ${b} = ${a % b}`);
+            appendToOutput('arithmeticOutput', `거듭제곱: ${a} ** ${b} = ${a ** b}\n`);
+
+            // 증감 연산자
+            let x = 5;
+            appendToOutput('arithmeticOutput', '증감 연산자:');
+            appendToOutput('arithmeticOutput', `전위 증가(++x): ${++x}`);
+            appendToOutput('arithmeticOutput', `후위 증가(x++): ${x++}`);
+            appendToOutput('arithmeticOutput', `최종 값: ${x}`);
+        }
+
+        /**
+         * 비교 및 논리 연산자 예제
+         * 다양한 비교 연산과 논리 연산의 결과를 보여줍니다.
+         */
+        function runComparisonExample() {
+            const output = document.getElementById('comparisonOutput');
+            output.innerHTML = '';
+
+            // 비교 연산자
+            appendToOutput('comparisonOutput', '1. 비교 연산자:');
+            appendToOutput('comparisonOutput', `5 == "5": ${5 == "5"}`);
+            appendToOutput('comparisonOutput', `5 === "5": ${5 === "5"}`);
+            appendToOutput('comparisonOutput', `5 != "5": ${5 != "5"}`);
+            appendToOutput('comparisonOutput', `5 !== "5": ${5 !== "5"}\n`);
+
+            // 논리 연산자
+            appendToOutput('comparisonOutput', '2. 논리 연산자:');
+            appendToOutput('comparisonOutput', `true && true: ${true && true}`);
+            appendToOutput('comparisonOutput', `true && false: ${true && false}`);
+            appendToOutput('comparisonOutput', `true || false: ${true || false}`);
+            appendToOutput('comparisonOutput', `!true: ${!true}`);
+        }
+
+        /**
+         * 조건문 예제
+         * if, else if, else, switch 문의 사용법을 보여줍니다.
+         */
+        function runConditionExample() {
+            const output = document.getElementById('conditionOutput');
+            output.innerHTML = '';
+
+            // if-else 예제
+            appendToOutput('conditionOutput', '1. if-else 문:');
+            const score = 85;
+            
+            if (score >= 90) {
+                appendToOutput('conditionOutput', '학점: A');
+            } else if (score >= 80) {
+                appendToOutput('conditionOutput', '학점: B');
+            } else if (score >= 70) {
+                appendToOutput('conditionOutput', '학점: C');
+            } else {
+                appendToOutput('conditionOutput', '학점: F');
+            }
+
+            // switch 예제
+            appendToOutput('conditionOutput', '\n2. switch 문:');
+            const day = new Date().getDay();
+            switch (day) {
+                case 0:
+                    appendToOutput('conditionOutput', '오늘은 일요일입니다.');
+                    break;
+                case 6:
+                    appendToOutput('conditionOutput', '오늘은 토요일입니다.');
+                    break;
+                default:
+                    appendToOutput('conditionOutput', '오늘은 평일입니다.');
+            }
+        }
+
+        /**
+         * 반복문 예제
+         * for, while, do-while 등의 반복문 사용법을 보여줍니다.
+         */
+        function runLoopExample() {
+            const output = document.getElementById('loopOutput');
+            output.innerHTML = '';
+
+            // for 반복문
+            appendToOutput('loopOutput', '1. for 반복문:');
+            for (let i = 1; i <= 5; i++) {
+                appendToOutput('loopOutput', `반복 ${i}번째`);
+            }
+
+            // while 반복문
+            appendToOutput('loopOutput', '\n2. while 반복문:');
+            let count = 0;
+            while (count < 3) {
+                appendToOutput('loopOutput', `카운트: ${count}`);
+                count++;
+            }
+
+            // for...of 반복문 (배열)
+            appendToOutput('loopOutput', '\n3. for...of 반복문:');
+            const fruits = ['사과', '바나나', '오렌지'];
+            for (const fruit of fruits) {
+                appendToOutput('loopOutput', `과일: ${fruit}`);
+            }
+
+            // for...in 반복문 (객체)
+            appendToOutput('loopOutput', '\n4. for...in 반복문:');
+            const person = { name: '홍길동', age: 25, job: '개발자' };
+            for (const key in person) {
+                appendToOutput('loopOutput', `${key}: ${person[key]}`);
+            }
+        }
+    </script>
+
+    <!-- 스타일 정의 -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .sub-section {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .output {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .explanation {
+            background-color: #e1f5fe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        h3 {
+            color: #2196F3;
+            margin-top: 20px;
+        }
+    </style>
+</body>
+</html> 

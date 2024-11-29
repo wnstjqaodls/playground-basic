@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바스크립트 함수</title>
+</head>
+<body>
+    <h1>자바스크립트 함수</h1>
+
+    <!-- 기본 함수 섹션 -->
+    <div class="section">
+        <h2>1. 기본 함수</h2>
+        <div class="explanation">
+            자바스크립트에서 함수를 선언하고 사용하는 기본적인 방법을 알아봅니다.
+            함수 선언식과 함수 표현식의 차이점을 이해합니다.
+        </div>
+        <div class="sub-section">
+            <h3>1.1 함수 선언식</h3>
+            <div class="explanation">
+                function 키워드를 사용한 기본적인 함수 선언 방식입니다.
+                호이스팅(hoisting)이 발생하여 선언 전에도 사용할 수 있습니다.
+            </div>
+            <button onclick="runFunctionDeclarationExample()">함수 선언식 예제 실행</button>
+            <div id="functionDeclarationOutput" class="output"></div>
+        </div>
+        <div class="sub-section">
+            <h3>1.2 함수 표현식</h3>
+            <div class="explanation">
+                변수에 함수를 할당하는 방식입니다.
+                호이스팅이 발생하지 않아 선언 후에만 사용할 수 있습니다.
+            </div>
+            <button onclick="runFunctionExpressionExample()">함수 표현식 예제 실행</button>
+            <div id="functionExpressionOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 화살표 함수 섹션 -->
+    <div class="section">
+        <h2>2. 화살표 함수</h2>
+        <div class="explanation">
+            ES6에서 도입된 화살표 함수(Arrow Function)는 더 간결한 함수 작성을 가능하게 합니다.
+            this 바인딩이 일반 함수와 다르다는 특징이 있습니다.
+        </div>
+        <button onclick="runArrowFunctionExample()">화살표 함수 예제 실행</button>
+        <div id="arrowFunctionOutput" class="output"></div>
+    </div>
+
+    <!-- 콜백 함수 섹션 -->
+    <div class="section">
+        <h2>3. 콜백 함수</h2>
+        <div class="explanation">
+            다른 함수에 인자로 전달되어 나중에 실행되는 함수입니다.
+            비동기 프로그래밍에서 많이 사용됩니다.
+        </div>
+        <button onclick="runCallbackExample()">콜백 함수 예제 실행</button>
+        <div id="callbackOutput" class="output"></div>
+    </div>
+
+    <!-- 클로저 섹션 -->
+    <div class="section">
+        <h2>4. 클로저</h2>
+        <div class="explanation">
+            함수가 자신이 생성될 때의 환경을 기억하는 현상입니다.
+            데이터 은닉과 캡슐화를 구현할 수 있습니다.
+        </div>
+        <button onclick="runClosureExample()">클로저 예제 실행</button>
+        <div id="closureOutput" class="output"></div>
+    </div>
+
+    <script>
+        /**
+         * 출력 함수 - 결과를 화면에 표시
+         * @param {string} outputId - 출력할 div의 ID
+         * @param {string} text - 출력할 텍스트
+         * @param {boolean} isError - 에러 여부 (true면 빨간색으로 표시)
+         */
+        function appendToOutput(outputId, text, isError = false) {
+            const output = document.getElementById(outputId);
+            const line = document.createElement('div');
+            line.style.color = isError ? 'red' : 'black';
+            line.textContent = text;
+            output.appendChild(line);
+        }
+
+        /**
+         * 함수 선언식 예제
+         * 기본적인 함수 선언 방식을 보여줍니다.
+         * 호이스팅으로 인해 선언 전에도 사용 가능합니다.
+         */
+        function runFunctionDeclarationExample() {
+            const output = document.getElementById('functionDeclarationOutput');
+            output.innerHTML = '';
+
+            // 호이스팅 예제
+            appendToOutput('functionDeclarationOutput', '1. 호이스팅 예제:');
+            appendToOutput('functionDeclarationOutput', sayHello('Alice')); // 함수 선언 전에 호출 가능
+
+            function sayHello(name) {
+                return `안녕하세요, ${name}님!`;
+            }
+
+            // 매개변수와 반환값
+            appendToOutput('functionDeclarationOutput', '\n2. 매개변수와 반환값:');
+            function add(a, b) {
+                return a + b;
+            }
+            appendToOutput('functionDeclarationOutput', `2 + 3 = ${add(2, 3)}`);
+
+            // 기본 매개변수
+            appendToOutput('functionDeclarationOutput', '\n3. 기본 매개변수:');
+            function greet(name = '손님') {
+                return `환영합니다, ${name}님!`;
+            }
+            appendToOutput('functionDeclarationOutput', greet());
+            appendToOutput('functionDeclarationOutput', greet('홍길동'));
+        }
+
+        /**
+         * 함수 표현식 예제
+         * 변수에 함수를 할당하는 방식입니다.
+         * 호이스팅이 발생하지 않습니다.
+         */
+        function runFunctionExpressionExample() {
+            const output = document.getElementById('functionExpressionOutput');
+            output.innerHTML = '';
+
+            // 기본 함수 표현식
+            const multiply = function(a, b) {
+                return a * b;
+            };
+            appendToOutput('functionExpressionOutput', '1. 기본 함수 표현식:');
+            appendToOutput('functionExpressionOutput', `4 * 5 = ${multiply(4, 5)}`);
+
+            // 즉시 실행 함수 표현식 (IIFE)
+            appendToOutput('functionExpressionOutput', '\n2. 즉시 실행 함수:');
+            (function() {
+                appendToOutput('functionExpressionOutput', '이 함수는 선언과 동시에 실행됩니다.');
+            })();
+
+            // 함수를 변수처럼 사용
+            appendToOutput('functionExpressionOutput', '\n3. 함수를 변수처럼 사용:');
+            const operations = {
+                add: function(a, b) { return a + b; },
+                subtract: function(a, b) { return a - b; }
+            };
+            appendToOutput('functionExpressionOutput', `5 + 3 = ${operations.add(5, 3)}`);
+            appendToOutput('functionExpressionOutput', `5 - 3 = ${operations.subtract(5, 3)}`);
+        }
+
+        /**
+         * 화살표 함수 예제
+         * ES6에서 도입된 더 간결한 함수 작성 방식입니다.
+         * this 바인딩이 일반 함수와 다릅니다.
+         */
+        function runArrowFunctionExample() {
+            const output = document.getElementById('arrowFunctionOutput');
+            output.innerHTML = '';
+
+            // 기본 화살표 함수
+            appendToOutput('arrowFunctionOutput', '1. 기본 화살표 함수:');
+            const add = (a, b) => a + b;
+            appendToOutput('arrowFunctionOutput', `2 + 3 = ${add(2, 3)}`);
+
+            // 본문이 여러 줄인 경우
+            const getObject = (name, age) => {
+                const greeting = `안녕하세요, ${name}님!`;
+                return {
+                    name,
+                    age,
+                    greeting
+                };
+            };
+            appendToOutput('arrowFunctionOutput', '\n2. 객체를 반환하는 화살표 함수:');
+            appendToOutput('arrowFunctionOutput', 
+                JSON.stringify(getObject('홍길동', 25), null, 2));
+
+            // 배열 메서드와 함께 사용
+            appendToOutput('arrowFunctionOutput', '\n3. 배열 메서드와 화살표 함수:');
+            const numbers = [1, 2, 3, 4, 5];
+            const doubled = numbers.map(num => num * 2);
+            appendToOutput('arrowFunctionOutput', `원본 배열: ${numbers}`);
+            appendToOutput('arrowFunctionOutput', `두 배로 만든 배열: ${doubled}`);
+        }
+
+        /**
+         * 콜백 함수 예제
+         * 다른 함수에 인자로 전달되어 나중에 실행되는 함수입니다.
+         */
+        function runCallbackExample() {
+            const output = document.getElementById('callbackOutput');
+            output.innerHTML = '';
+
+            // 기본 콜백 예제
+            appendToOutput('callbackOutput', '1. 기본 콜백 함수:');
+            function processUser(name, callback) {
+                const user = { name, timestamp: new Date().toLocaleTimeString() };
+                callback(user);
+            }
+
+            processUser('홍길동', (user) => {
+                appendToOutput('callbackOutput', 
+                    `사용자 처리 완료: ${JSON.stringify(user)}`);
+            });
+
+            // 배열 메서드의 콜백
+            appendToOutput('callbackOutput', '\n2. 배열 메서드의 콜백:');
+            const numbers = [1, 2, 3, 4, 5];
+            
+            appendToOutput('callbackOutput', '- forEach 예제:');
+            numbers.forEach(num => 
+                appendToOutput('callbackOutput', `숫자: ${num}`));
+
+            appendToOutput('callbackOutput', '\n- filter 예제:');
+            const evenNumbers = numbers.filter(num => num % 2 === 0);
+            appendToOutput('callbackOutput', `짝수만 필터링: ${evenNumbers}`);
+        }
+
+        /**
+         * 클로저 예제
+         * 함수가 자신이 생성될 때의 환경을 기억하는 현상입니다.
+         */
+        function runClosureExample() {
+            const output = document.getElementById('closureOutput');
+            output.innerHTML = '';
+
+            // 기본 클로저
+            appendToOutput('closureOutput', '1. 기본 클로저:');
+            function createCounter() {
+                let count = 0;
+                return {
+                    increment: () => ++count,
+                    decrement: () => --count,
+                    getCount: () => count
+                };
+            }
+
+            const counter = createCounter();
+            appendToOutput('closureOutput', `초기 값: ${counter.getCount()}`);
+            counter.increment();
+            counter.increment();
+            appendToOutput('closureOutput', `두 번 증가 후: ${counter.getCount()}`);
+            counter.decrement();
+            appendToOutput('closureOutput', `한 번 감소 후: ${counter.getCount()}`);
+
+            // 데이터 은닉 예제
+            appendToOutput('closureOutput', '\n2. 데이터 은닉:');
+            function createBankAccount(initialBalance) {
+                let balance = initialBalance;
+                return {
+                    deposit: amount => {
+                        balance += amount;
+                        return `${amount}원 입금됨. 잔액: ${balance}원`;
+                    },
+                    withdraw: amount => {
+                        if (amount > balance) {
+                            return '잔액 부족';
+                        }
+                        balance -= amount;
+                        return `${amount}원 출금됨. 잔액: ${balance}원`;
+                    }
+                };
+            }
+
+            const account = createBankAccount(10000);
+            appendToOutput('closureOutput', account.deposit(5000));
+            appendToOutput('closureOutput', account.withdraw(3000));
+            appendToOutput('closureOutput', account.withdraw(15000));
+        }
+    </script>
+
+    <!-- 스타일 정의 -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .sub-section {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .output {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .explanation {
+            background-color: #e1f5fe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        h3 {
+            color: #2196F3;
+            margin-top: 20px;
+        }
+    </style>
+</body>
+</html> 

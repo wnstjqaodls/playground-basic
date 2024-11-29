@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>모던 자바스크립트</title>
+</head>
+<body>
+    <h1>모던 자바스크립트 (ES6+)</h1>
+
+    <!-- 변수와 스코프 섹션 -->
+    <div class="section">
+        <h2>1. 변수와 스코프</h2>
+        <div class="explanation">
+            ES6에서 도입된 let과 const를 사용한 변수 선언과 블록 스코프에 대해 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>1.1 let과 const</h3>
+            <div class="explanation">
+                var와 다른 let, const의 특징과 사용법을 이해합니다.
+            </div>
+            <button onclick="runVariableScopeExample()">변수와 스코프 예제 실행</button>
+            <div id="variableScopeOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 화살표 함수와 this -->
+    <div class="section">
+        <h2>2. 화살표 함수와 this</h2>
+        <div class="explanation">
+            화살표 함수의 특징과 일반 함수와의 차이점, this 바인딩을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>2.1 화살표 함수의 특징</h3>
+            <div class="explanation">
+                화살표 함수의 문법과 this 바인딩의 차이를 이해합니다.
+            </div>
+            <button onclick="runArrowFunctionExample()">화살표 함수 예제 실행</button>
+            <div id="arrowFunctionOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 템플릿 리터럴 -->
+    <div class="section">
+        <h2>3. 템플릿 리터럴</h2>
+        <div class="explanation">
+            백틱(`)을 사용한 문자열 처리와 보간법을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>3.1 문자열 보간</h3>
+            <div class="explanation">
+                템플릿 리터럴을 사용한 동적 문자열 생성 방법을 알아봅니다.
+            </div>
+            <button onclick="runTemplateExample()">템플릿 리터럴 예제 실행</button>
+            <div id="templateOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 구조 분해 할당 -->
+    <div class="section">
+        <h2>4. 구조 분해 할당</h2>
+        <div class="explanation">
+            배열과 객체의 구조 분해 할당 문법을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>4.1 배열과 객체 구조 분해</h3>
+            <div class="explanation">
+                배열과 객체에서 원하는 값을 쉽게 추출하는 방법을 알아봅니다.
+            </div>
+            <button onclick="runDestructuringExample()">구조 분해 예제 실행</button>
+            <div id="destructuringOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 스프레드와 레스트 -->
+    <div class="section">
+        <h2>5. 스프레드와 레스트</h2>
+        <div class="explanation">
+            스프레드 연산자(...)를 사용한 배열과 객체의 확장, 레스트 파라미터를 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>5.1 스프레드와 레스트 활용</h3>
+            <div class="explanation">
+                배열과 객체를 복사하고 합치는 방법, 가변 인자 처리를 알아봅니다.
+            </div>
+            <button onclick="runSpreadRestExample()">스프레드/레스트 예제 실행</button>
+            <div id="spreadRestOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 클래스와 모듈 -->
+    <div class="section">
+        <h2>6. 클래스와 모듈</h2>
+        <div class="explanation">
+            ES6의 클래스 문법과 모듈 시스템을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>6.1 클래스 문법</h3>
+            <div class="explanation">
+                클래스를 사용한 객체 지향 프로그래밍을 알아봅니다.
+            </div>
+            <button onclick="runClassExample()">클래스 예제 실행</button>
+            <div id="classOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 출력 함수 - 결과를 화면에 표시
+         * @param {string} outputId - 출력할 div의 ID
+         * @param {string} text - 출력할 텍스트
+         * @param {boolean} isError - 에러 여부 (true면 빨간색으로 표시)
+         */
+        function appendToOutput(outputId, text, isError = false) {
+            const output = document.getElementById(outputId);
+            const line = document.createElement('div');
+            line.style.color = isError ? 'red' : 'black';
+            line.textContent = text;
+            output.appendChild(line);
+        }
+
+        /**
+         * 변수와 스코프 예제
+         * let, const의 특징과 블록 스코프를 보여줍니다.
+         */
+        function runVariableScopeExample() {
+            const output = document.getElementById('variableScopeOutput');
+            output.innerHTML = '';
+
+            // let과 블록 스코프
+            appendToOutput('variableScopeOutput', '1. let과 블록 스코프:');
+            let x = 10;
+            appendToOutput('variableScopeOutput', `초기 x: ${x}`);
+            {
+                let x = 20; // 새로운 블록 스코프의 x
+                appendToOutput('variableScopeOutput', `블록 내부 x: ${x}`);
+            }
+            appendToOutput('variableScopeOutput', `블록 외부 x: ${x}`);
+
+            // const와 불변성
+            appendToOutput('variableScopeOutput', '\n2. const와 불변성:');
+            const PI = 3.14159;
+            appendToOutput('variableScopeOutput', `PI: ${PI}`);
+            try {
+                PI = 3; // 에러 발생
+            } catch (e) {
+                appendToOutput('variableScopeOutput', '상수는 재할당할 수 없습니다.', true);
+            }
+
+            // const와 객체
+            appendToOutput('variableScopeOutput', '\n3. const와 객체:');
+            const user = { name: '홍길동' };
+            appendToOutput('variableScopeOutput', `초기 user: ${JSON.stringify(user)}`);
+            user.name = '김철수'; // 객체의 속성은 변경 가능
+            appendToOutput('variableScopeOutput', `수정된 user: ${JSON.stringify(user)}`);
+        }
+
+        /**
+         * 화살표 함수 예제
+         * 화살표 함수의 특징과 this 바인딩을 보여줍니다.
+         */
+        function runArrowFunctionExample() {
+            const output = document.getElementById('arrowFunctionOutput');
+            output.innerHTML = '';
+
+            // 기본 화살표 함수
+            appendToOutput('arrowFunctionOutput', '1. 기본 화살표 함수:');
+            const add = (a, b) => a + b;
+            appendToOutput('arrowFunctionOutput', `2 + 3 = ${add(2, 3)}`);
+
+            // this 바인딩 차이
+            appendToOutput('arrowFunctionOutput', '\n2. this 바인딩:');
+            const obj = {
+                name: '테스트',
+                // 일반 함수
+                regularMethod: function() {
+                    return `일반 함수 this.name: ${this.name}`;
+                },
+                // 화살표 함수
+                arrowMethod: () => {
+                    return `화살표 함수 this.name: ${this?.name}`;
+                }
+            };
+            appendToOutput('arrowFunctionOutput', obj.regularMethod());
+            appendToOutput('arrowFunctionOutput', obj.arrowMethod());
+
+            // 콜백에서의 화살표 함수
+            appendToOutput('arrowFunctionOutput', '\n3. 콜백에서의 화살표 함수:');
+            const numbers = [1, 2, 3];
+            const doubled = numbers.map(n => n * 2);
+            appendToOutput('arrowFunctionOutput', `[${numbers}] 두 배: [${doubled}]`);
+        }
+
+        /**
+         * 템플릿 리터럴 예제
+         * 백틱을 사용한 문자열 처리를 보여줍니다.
+         */
+        function runTemplateExample() {
+            const output = document.getElementById('templateOutput');
+            output.innerHTML = '';
+
+            const name = '홍길동';
+            const age = 25;
+
+            // 기본 문자열 보간
+            appendToOutput('templateOutput', '1. 기본 문자열 보간:');
+            const greeting = `안녕하세요, ${name}님!`;
+            appendToOutput('templateOutput', greeting);
+
+            // 표현식 포함
+            appendToOutput('templateOutput', '\n2. 표현식 포함:');
+            const message = `${name}님은 ${age >= 20 ? '성인' : '미성년자'}입니다.`;
+            appendToOutput('templateOutput', message);
+
+            // 여러 줄 문자열
+            appendToOutput('templateOutput', '\n3. 여러 줄 문자열:');
+            const multiLine = `
+                이름: ${name}
+                나이: ${age}
+                직업: 프로그래머
+            `;
+            appendToOutput('templateOutput', multiLine);
+        }
+
+        /**
+         * 구조 분해 할당 예제
+         * 배열과 객체의 구조 분해를 보여줍니다.
+         */
+        function runDestructuringExample() {
+            const output = document.getElementById('destructuringOutput');
+            output.innerHTML = '';
+
+            // 배열 구조 분해
+            appendToOutput('destructuringOutput', '1. 배열 구조 분해:');
+            const numbers = [1, 2, 3, 4, 5];
+            const [first, second, ...rest] = numbers;
+            appendToOutput('destructuringOutput', `첫 번째: ${first}`);
+            appendToOutput('destructuringOutput', `두 번째: ${second}`);
+            appendToOutput('destructuringOutput', `나머지: ${rest}`);
+
+            // 객체 구조 분해
+            appendToOutput('destructuringOutput', '\n2. 객체 구조 분해:');
+            const person = {
+                name: '홍길동',
+                age: 25,
+                job: '개발자',
+                address: {
+                    city: '서울',
+                    district: '강남구'
+                }
+            };
+            const { name, age, address: { city } } = person;
+            appendToOutput('destructuringOutput', `이름: ${name}`);
+            appendToOutput('destructuringOutput', `나이: ${age}`);
+            appendToOutput('destructuringOutput', `도시: ${city}`);
+
+            // 함수 매개변수 구조 분해
+            appendToOutput('destructuringOutput', '\n3. 함수 매개변수 구조 분해:');
+            function printUserInfo({ name, age }) {
+                return `${name}님은 ${age}세입니다.`;
+            }
+            appendToOutput('destructuringOutput', printUserInfo(person));
+        }
+
+        /**
+         * 스프레드와 레스트 예제
+         * 스프레드 연산자와 레스트 파라미터를 보여줍니다.
+         */
+        function runSpreadRestExample() {
+            const output = document.getElementById('spreadRestOutput');
+            output.innerHTML = '';
+
+            // 배열 스프레드
+            appendToOutput('spreadRestOutput', '1. 배열 스프레드:');
+            const arr1 = [1, 2, 3];
+            const arr2 = [4, 5, 6];
+            const combined = [...arr1, ...arr2];
+            appendToOutput('spreadRestOutput', `합친 배열: ${combined}`);
+
+            // 객체 스프레드
+            appendToOutput('spreadRestOutput', '\n2. 객체 스프레드:');
+            const defaultSettings = { theme: 'light', font: '12px' };
+            const userSettings = { theme: 'dark' };
+            const finalSettings = { ...defaultSettings, ...userSettings };
+            appendToOutput('spreadRestOutput', `최종 설정: ${JSON.stringify(finalSettings)}`);
+
+            // 레스트 파라미터
+            appendToOutput('spreadRestOutput', '\n3. 레스트 파라미터:');
+            function sum(...numbers) {
+                return numbers.reduce((acc, curr) => acc + curr, 0);
+            }
+            appendToOutput('spreadRestOutput', `1, 2, 3의 합: ${sum(1, 2, 3)}`);
+            appendToOutput('spreadRestOutput', `1부터 5까지의 합: ${sum(1, 2, 3, 4, 5)}`);
+        }
+
+        /**
+         * 클래스 예제
+         * ES6 클래스 문법을 보여줍니다.
+         */
+        function runClassExample() {
+            const output = document.getElementById('classOutput');
+            output.innerHTML = '';
+
+            // 기본 클래스
+            class Animal {
+                constructor(name) {
+                    this.name = name;
+                }
+
+                speak() {
+                    return `${this.name}이(가) 소리를 냅니다.`;
+                }
+            }
+
+            // 상속
+            class Dog extends Animal {
+                constructor(name, breed) {
+                    super(name);
+                    this.breed = breed;
+                }
+
+                speak() {
+                    return `${this.breed} ${this.name}이(가) 멍멍 짖습니다.`;
+                }
+            }
+
+            // 클래스 사용
+            appendToOutput('classOutput', '1. 기본 클래스:');
+            const animal = new Animal('동물');
+            appendToOutput('classOutput', animal.speak());
+
+            appendToOutput('classOutput', '\n2. 상속된 클래스:');
+            const dog = new Dog('멍멍이', '진돗개');
+            appendToOutput('classOutput', dog.speak());
+
+            // private 필드 (최신 문법)
+            appendToOutput('classOutput', '\n3. Private 필드:');
+            class Counter {
+                #count = 0;
+
+                increment() {
+                    this.#count++;
+                    return this.#count;
+                }
+
+                getCount() {
+                    return this.#count;
+                }
+            }
+
+            const counter = new Counter();
+            appendToOutput('classOutput', `카운터: ${counter.getCount()}`);
+            counter.increment();
+            appendToOutput('classOutput', `증가 후: ${counter.getCount()}`);
+        }
+    </script>
+
+    <!-- 스타일 정의 -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .sub-section {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .output {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .explanation {
+            background-color: #e1f5fe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        h3 {
+            color: #2196F3;
+            margin-top: 20px;
+        }
+    </style>
+</body>
+</html> 

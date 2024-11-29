@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>jQuery Ajax 예제</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <script src="./js/jquery.min.js"></script>
+    <script>
+        $(function() {
+            // 테스트용 뉴스 데이터 (로컬 개발용)
+            // CORS 이슈로 인해 로컬에서는 외부 파일 대신 JavaScript 객체로 데이터를 직접 정의
+            const newsData = {
+                "news": [
+                    {
+                        "id": 1,
+                        "title": "웹 개발 트렌드 2024",
+                        "content": "AI 기반 개발 도구와 WebAssembly가 주목받고 있으며, 마이크로 프론트엔드 아키텍처가 대세로 자리잡고 있습니다.",
+                        "date": "2024-01-28",
+                        "author": "김개발"
+                    },
+                    {
+                        "id": 2,
+                        "title": "jQuery vs Modern JavaScript",
+                        "content": "여전히 많은 기업에서 사용되는 jQuery, 모던 자바스크립트와의 차이점과 활용 사례를 알아봅니다.",
+                        "date": "2024-01-27",
+                        "author": "이프론트"
+                    },
+                    {
+                        "id": 3,
+                        "title": "CORS 정책 이해하기",
+                        "content": "브라우저의 동일 출처 정책과 CORS에 대해 알아보고, 개발 환경에서의 해결 방법을 소개합니다.",
+                        "date": "2024-01-26",
+                        "author": "박보안"
+                    }
+                ]
+            };
+
+            // 로컬 개발 환경에서의 데이터 로드
+            $("#loadNewsBtn").click(function() {
+                displayNews(newsData);
+            });
+
+            // 실제 서버 환경에서의 데이터 로드 (주석 처리)
+            /*
+            $("#loadNewsBtn").click(function() {
+                $.get("/api/news", function(data) {
+                    displayNews(data);
+                })
+                .fail(function(error) {
+                    $("#newsResult").html("뉴스를 불러오는데 실패했습니다: " + error.statusText);
+                });
+            });
+            */
+
+            // 뉴스 표시 함수
+            function displayNews(data) {
+                let html = "<div class='news-container'>";
+                data.news.forEach(function(item) {
+                    html += `
+                        <article class="news-item">
+                            <h3>${item.title}</h3>
+                            <p class="news-content">${item.content}</p>
+                            <div class="news-meta">
+                                <span class="date">${item.date}</span>
+                                <span class="author">작성자: ${item.author}</span>
+                            </div>
+                        </article>
+                    `;
+                });
+                html += "</div>";
+                $("#newsResult").html(html);
+            }
+        });
+    </script>
+    <style>
+        .news-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .news-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .news-item h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+            font-size: 1.4em;
+        }
+        .news-content {
+            margin: 0 0 15px 0;
+            color: #666;
+            line-height: 1.6;
+        }
+        .news-meta {
+            font-size: 0.9em;
+            color: #888;
+        }
+        .news-meta .date {
+            margin-right: 15px;
+        }
+        .news-meta .author {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>jQuery Ajax 뉴스 예제</h1>
+        
+        <!-- CORS 및 개발 환경 설명 -->
+        <div class="info-box" style="margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+            <h3>개발 환경 안내</h3>
+            <p>현재 로컬 개발 환경에서는 CORS(Cross-Origin Resource Sharing) 정책으로 인해 외부 파일에 대한 Ajax 요청이 차단됩니다.</p>
+            <p>따라서 테스트를 위해 JavaScript 객체로 데이터를 직접 정의하여 사용합니다.</p>
+            <p>실제 서버 환경에서는 주석 처리된 $.get() 코드를 사용하면 됩니다.</p>
+        </div>
+
+        <!-- 뉴스 데이터 로드 -->
+        <section>
+            <h2>뉴스 데이터 로드</h2>
+            <button id="loadNewsBtn">뉴스 불러오기</button>
+            <div id="newsResult"></div>
+        </section>
+    </div>
+</body>
+</html>

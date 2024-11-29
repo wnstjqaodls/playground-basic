@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바스크립트 객체</title>
+</head>
+<body>
+    <h1>자바스크립트 객체</h1>
+
+    <!-- 객체 기초 섹션 -->
+    <div class="section">
+        <h2>1. 객체 기초</h2>
+        <div class="explanation">
+            자바스크립트 객체의 기본 개념과 생성 방법을 알아봅니다.
+            객체 리터럴, 프로퍼티, 메서드의 개념을 이해합니다.
+        </div>
+        <div class="sub-section">
+            <h3>1.1 객체 생성</h3>
+            <div class="explanation">
+                객체를 생성하는 다양한 방법을 살펴봅니다.
+            </div>
+            <button onclick="runObjectCreationExample()">객체 생성 예제 실행</button>
+            <div id="objectCreationOutput" class="output"></div>
+        </div>
+        <div class="sub-section">
+            <h3>1.2 프로퍼티와 메서드</h3>
+            <div class="explanation">
+                객체의 프로퍼티와 메서드를 다루는 방법을 알아봅니다.
+            </div>
+            <button onclick="runPropertyMethodExample()">프로퍼티와 메서드 예제 실행</button>
+            <div id="propertyMethodOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 객체 상속 섹션 -->
+    <div class="section">
+        <h2>2. 객체 상속</h2>
+        <div class="explanation">
+            프로토타입을 통한 상속과 객체 간의 관계를 이해합니다.
+        </div>
+        <div class="sub-section">
+            <h3>2.1 프로토타입 상속</h3>
+            <div class="explanation">
+                프로토타입 체인과 상속 구현 방법을 알아봅니다.
+            </div>
+            <button onclick="runInheritanceExample()">상속 예제 실행</button>
+            <div id="inheritanceOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 객체 메서드 섹션 -->
+    <div class="section">
+        <h2>3. 객체 메서드</h2>
+        <div class="explanation">
+            Object 클래스의 정적 메서드와 인스턴스 메서드를 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>3.1 Object 메서드</h3>
+            <div class="explanation">
+                Object.keys(), Object.values(), Object.entries() 등의 유용한 메서드들을 살펴봅니다.
+            </div>
+            <button onclick="runObjectMethodsExample()">객체 메서드 예제 실행</button>
+            <div id="objectMethodsOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 고급 객체 기능 섹션 -->
+    <div class="section">
+        <h2>4. 고급 객체 기능</h2>
+        <div class="explanation">
+            getter/setter, 속성 설명자, 객체 동결 등 고급 기능을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>4.1 Getter와 Setter</h3>
+            <div class="explanation">
+                접근자 프로퍼티를 사용하여 데이터를 캡슐화하는 방법을 알아봅니다.
+            </div>
+            <button onclick="runAdvancedFeaturesExample()">고급 기능 예제 실행</button>
+            <div id="advancedFeaturesOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 출력 함수 - 결과를 화면에 표시
+         * @param {string} outputId - 출력할 div의 ID
+         * @param {string} text - 출력할 텍스트
+         * @param {boolean} isError - 에러 여부 (true면 빨간색으로 표시)
+         */
+        function appendToOutput(outputId, text, isError = false) {
+            const output = document.getElementById(outputId);
+            const line = document.createElement('div');
+            line.style.color = isError ? 'red' : 'black';
+            line.textContent = text;
+            output.appendChild(line);
+        }
+
+        /**
+         * 객체 생성 예제
+         * 다양한 방법으로 객체를 생성하는 방법을 보여줍니다.
+         */
+        function runObjectCreationExample() {
+            const output = document.getElementById('objectCreationOutput');
+            output.innerHTML = '';
+
+            // 객체 리터럴
+            appendToOutput('objectCreationOutput', '1. 객체 리터럴로 생성:');
+            const person = {
+                name: '홍길동',
+                age: 25,
+                sayHello() {
+                    return `안녕하세요, 저는 ${this.name}입니다.`;
+                }
+            };
+            appendToOutput('objectCreationOutput', JSON.stringify(person, null, 2));
+            appendToOutput('objectCreationOutput', person.sayHello());
+
+            // 생성자 함수
+            appendToOutput('objectCreationOutput', '\n2. 생성자 함수로 생성:');
+            function Person(name, age) {
+                this.name = name;
+                this.age = age;
+                this.greet = function() {
+                    return `반갑습니다, ${this.name}입니다.`;
+                };
+            }
+            const person2 = new Person('김철수', 30);
+            appendToOutput('objectCreationOutput', JSON.stringify(person2, null, 2));
+            appendToOutput('objectCreationOutput', person2.greet());
+
+            // Object.create()
+            appendToOutput('objectCreationOutput', '\n3. Object.create()로 생성:');
+            const personProto = {
+                introduce() {
+                    return `이름: ${this.name}, 나이: ${this.age}`;
+                }
+            };
+            const person3 = Object.create(personProto);
+            person3.name = '이영희';
+            person3.age = 28;
+            appendToOutput('objectCreationOutput', person3.introduce());
+        }
+
+        /**
+         * 프로퍼티와 메서드 예제
+         * 객체의 프로퍼티와 메서드를 다루는 방법을 보여줍니다.
+         */
+        function runPropertyMethodExample() {
+            const output = document.getElementById('propertyMethodOutput');
+            output.innerHTML = '';
+
+            const car = {
+                brand: '현대',
+                model: '아반떼',
+                year: 2023,
+                features: ['에어백', '후방 카메라', '블루투스'],
+                start() {
+                    return `${this.brand} ${this.model} 시동 걸림`;
+                }
+            };
+
+            // 프로퍼티 접근
+            appendToOutput('propertyMethodOutput', '1. 프로퍼티 접근:');
+            appendToOutput('propertyMethodOutput', `점 표기법: ${car.brand}`);
+            appendToOutput('propertyMethodOutput', `대괄호 표기법: ${car['model']}`);
+
+            // 프로퍼티 추가/수정/삭제
+            appendToOutput('propertyMethodOutput', '\n2. 프로퍼티 조작:');
+            car.color = '흰색'; // 추가
+            car.year = 2024; // 수정
+            delete car.features; // 삭제
+            appendToOutput('propertyMethodOutput', JSON.stringify(car, null, 2));
+
+            // 메서드 호출
+            appendToOutput('propertyMethodOutput', '\n3. 메서드 호출:');
+            appendToOutput('propertyMethodOutput', car.start());
+        }
+
+        /**
+         * 상속 예제
+         * 프로토타입을 통한 상속을 보여줍니다.
+         */
+        function runInheritanceExample() {
+            const output = document.getElementById('inheritanceOutput');
+            output.innerHTML = '';
+
+            // 부모 생성자
+            function Animal(name) {
+                this.name = name;
+            }
+
+            // 프로토타입에 메서드 추가
+            Animal.prototype.makeSound = function() {
+                return `${this.name}이(가) 소리를 냅니다.`;
+            };
+
+            // 자식 생성자
+            function Dog(name, breed) {
+                Animal.call(this, name); // 부모 생성자 호출
+                this.breed = breed;
+            }
+
+            // 프로토타입 상속
+            Dog.prototype = Object.create(Animal.prototype);
+            Dog.prototype.constructor = Dog;
+
+            // 자식 클래스의 메서드 추가
+            Dog.prototype.bark = function() {
+                return `${this.name}이(가) 멍멍 짖습니다.`;
+            };
+
+            // 객체 생성 및 테스트
+            const dog = new Dog('멍멍이', '진돗개');
+            
+            appendToOutput('inheritanceOutput', '1. 객체 정보:');
+            appendToOutput('inheritanceOutput', `이름: ${dog.name}`);
+            appendToOutput('inheritanceOutput', `품종: ${dog.breed}`);
+            
+            appendToOutput('inheritanceOutput', '\n2. 메서드 호출:');
+            appendToOutput('inheritanceOutput', dog.makeSound()); // 부모 메서드
+            appendToOutput('inheritanceOutput', dog.bark()); // 자식 메서드
+
+            // instanceof 체크
+            appendToOutput('inheritanceOutput', '\n3. instanceof 체크:');
+            appendToOutput('inheritanceOutput', `dog instanceof Dog: ${dog instanceof Dog}`);
+            appendToOutput('inheritanceOutput', `dog instanceof Animal: ${dog instanceof Animal}`);
+        }
+
+        /**
+         * Object 메서드 예제
+         * Object 클래스의 유용한 정적 메서드들을 보여줍니다.
+         */
+        function runObjectMethodsExample() {
+            const output = document.getElementById('objectMethodsOutput');
+            output.innerHTML = '';
+
+            const person = {
+                name: '홍길동',
+                age: 25,
+                job: '개발자',
+                skills: ['JavaScript', 'Python', 'Java']
+            };
+
+            // Object.keys()
+            appendToOutput('objectMethodsOutput', '1. Object.keys():');
+            appendToOutput('objectMethodsOutput', JSON.stringify(Object.keys(person)));
+
+            // Object.values()
+            appendToOutput('objectMethodsOutput', '\n2. Object.values():');
+            appendToOutput('objectMethodsOutput', JSON.stringify(Object.values(person)));
+
+            // Object.entries()
+            appendToOutput('objectMethodsOutput', '\n3. Object.entries():');
+            appendToOutput('objectMethodsOutput', JSON.stringify(Object.entries(person), null, 2));
+
+            // Object.assign()
+            appendToOutput('objectMethodsOutput', '\n4. Object.assign():');
+            const newPerson = Object.assign({}, person, { location: '서울' });
+            appendToOutput('objectMethodsOutput', JSON.stringify(newPerson, null, 2));
+        }
+
+        /**
+         * 고급 객체 기능 예제
+         * getter/setter와 속성 설명자를 보여줍니다.
+         */
+        function runAdvancedFeaturesExample() {
+            const output = document.getElementById('advancedFeaturesOutput');
+            output.innerHTML = '';
+
+            // getter/setter 예제
+            const person = {
+                firstName: '길동',
+                lastName: '홍',
+                get fullName() {
+                    return `${this.lastName}${this.firstName}`;
+                },
+                set fullName(name) {
+                    [this.lastName, this.firstName] = name.split(' ');
+                }
+            };
+
+            appendToOutput('advancedFeaturesOutput', '1. getter/setter:');
+            appendToOutput('advancedFeaturesOutput', `전체 이름: ${person.fullName}`);
+            person.fullName = '김 철수';
+            appendToOutput('advancedFeaturesOutput', `변경된 이름: ${person.fullName}`);
+
+            // 속성 설명자
+            appendToOutput('advancedFeaturesOutput', '\n2. 속성 설명자:');
+            const obj = {};
+            Object.defineProperty(obj, 'readOnly', {
+                value: '읽기 전용 속성',
+                writable: false
+            });
+
+            appendToOutput('advancedFeaturesOutput', `초기값: ${obj.readOnly}`);
+            try {
+                obj.readOnly = '변경 시도';
+                appendToOutput('advancedFeaturesOutput', `변경 후: ${obj.readOnly}`);
+            } catch (e) {
+                appendToOutput('advancedFeaturesOutput', '속성을 변경할 수 없습니다.', true);
+            }
+
+            // 객체 동결
+            appendToOutput('advancedFeaturesOutput', '\n3. 객체 동결:');
+            const frozen = Object.freeze({ prop: 42 });
+            appendToOutput('advancedFeaturesOutput', `초기값: ${frozen.prop}`);
+            try {
+                frozen.prop = 100;
+                appendToOutput('advancedFeaturesOutput', `변경 후: ${frozen.prop}`);
+            } catch (e) {
+                appendToOutput('advancedFeaturesOutput', '동결된 객체는 수정할 수 없습니다.', true);
+            }
+        }
+    </script>
+
+    <!-- 스타일 정의 -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .sub-section {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .output {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .explanation {
+            background-color: #e1f5fe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        h3 {
+            color: #2196F3;
+            margin-top: 20px;
+        }
+    </style>
+</body>
+</html> 

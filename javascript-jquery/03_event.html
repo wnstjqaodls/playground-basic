@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>jQuery 이벤트 처리</title>
+<link rel="stylesheet" href="./css/common.css">
+<script src="./js/jquery.min.js"></script>
+<script>
+$(function(){
+    // 1. 마우스 이벤트
+    $("#mouseArea").on({
+        mouseenter: function(){
+            $(this).css("background", "#f0f0f0");
+        },
+        mouseleave: function(){
+            $(this).css("background", "#ffffff");
+        },
+        click: function(e){
+            $("#coordinates").text(`X: ${e.pageX}, Y: ${e.pageY}`);
+        }
+    });
+
+    // 2. 키보드 이벤트
+    $("#keyInput").on({
+        keyup: function(){
+            let value = $(this).val();
+            $("#keyOutput").text(value);
+        },
+        focus: function(){
+            $(this).css("border-color", "#007bff");
+        },
+        blur: function(){
+            $(this).css("border-color", "#ced4da");
+        }
+    });
+
+    // 3. 동적 이벤트 바인딩
+    $("#addItem").click(function(){
+        $("#itemList").append("<li>새로운 항목</li>");
+    });
+
+    $("#itemList").on("click", "li", function(){
+        $(this).toggleClass("selected");
+    });
+
+    // 4. 이벤트 전파 제어
+    $(".parent").click(function(){
+        alert("부모 요소 클릭");
+    });
+
+    $(".child").click(function(e){
+        e.stopPropagation();
+        alert("자식 요소 클릭");
+    });
+});
+</script>
+</head>
+<body>
+    <div id="mouseArea" style="width:200px;height:200px;border:1px solid #ccc;">
+        마우스 이벤트 영역
+    </div>
+    <p id="coordinates"></p>
+
+    <div class="input-group">
+        <input type="text" id="keyInput" placeholder="텍스트 입력">
+        <p id="keyOutput"></p>
+    </div>
+
+    <div class="dynamic-list">
+        <button id="addItem">항목 추가</button>
+        <ul id="itemList">
+            <li>기본 항목 1</li>
+            <li>기본 항목 2</li>
+        </ul>
+    </div>
+
+    <div class="parent" style="padding:20px;background:#f0f0f0;">
+        부모 요소
+        <div class="child" style="padding:20px;background:#fff;">
+            자식 요소
+        </div>
+    </div>
+</body>
+</html>

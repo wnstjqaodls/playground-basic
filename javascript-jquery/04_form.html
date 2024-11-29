@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>jQuery 폼 처리</title>
+<link rel="stylesheet" href="./css/common.css">
+<script src="./js/jquery.min.js"></script>
+<script>
+$(function(){
+    // 1. 폼 유효성 검사
+    $("#registForm").submit(function(e){
+        e.preventDefault();
+        
+        let isValid = true;
+        let errorMsg = [];
+
+        // 이메일 검사
+        let email = $("#email").val();
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)) {
+            errorMsg.push("올바른 이메일 형식이 아닙니다.");
+            isValid = false;
+        }
+
+        // 비밀번호 검사
+        let password = $("#password").val();
+        if(password.length < 8) {
+            errorMsg.push("비밀번호는 8자 이상이어야 합니다.");
+            isValid = false;
+        }
+
+        if(isValid) {
+            $("#successMsg").show().text("등록이 완료되었습니다!");
+            $("#errorMsg").hide();
+        } else {
+            $("#errorMsg").show().html(errorMsg.join("<br>"));
+            $("#successMsg").hide();
+        }
+    });
+
+    // 2. 동적 셀렉트 박스
+    $("#category").change(function(){
+        let selected = $(this).val();
+        let subCategories = {
+            electronics: ["스마트폰", "노트북", "태블릿"],
+            clothing: ["상의", "하의", "아우터"],
+            books: ["소설", "기술서적", "교양"]
+        };
+
+        let subSelect = $("#subCategory").empty();
+        subCategories[selected].forEach(function(item){
+            subSelect.append(new Option(item, item));
+        });
+    });
+
+    // 3. 파일 업로드 미리보기
+    $("#imageUpload").change(function(){
+        let file = this.files[0];
+        if(file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $("#imagePreview").attr('src', e.target.result);
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+});
+</script>
+</head>
+<body>
+    <form id="registForm">
+        <div class="form-group">
+            <label>이메일:</label>
+            <input type="email" id="email" required>
+        </div>
+
+        <div class="form-group">
+            <label>비밀번호:</label>
+            <input type="password" id="password" required>
+        </div>
+
+        <div class="form-group">
+            <label>카테고리:</label>
+            <select id="category">
+                <option value="electronics">전자기기</option>
+                <option value="clothing">의류</option>
+                <option value="books">도서</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>서브카테고리:</label>
+            <select id="subCategory"></select>
+        </div>
+
+        <div class="form-group">
+            <label>이미지 업로드:</label>
+            <input type="file" id="imageUpload" accept="image/*">
+            <img id="imagePreview" style="max-width:200px;display:none;">
+        </div>
+
+        <button type="submit">등록</button>
+    </form>
+
+    <div id="successMsg" style="display:none;color:green;"></div>
+    <div id="errorMsg" style="display:none;color:red;"></div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>자바스크립트 DOM 조작</title>
+</head>
+<body>
+    <h1>자바스크립트 DOM 조작</h1>
+
+    <!-- DOM 선택자 섹션 -->
+    <div class="section">
+        <h2>1. DOM 선택자</h2>
+        <div class="explanation">
+            DOM 요소를 선택하는 다양한 방법을 알아봅니다.
+            ID, 클래스, 태그 이름 등을 통해 요소를 선택할 수 있습니다.
+        </div>
+        <div class="sub-section">
+            <h3>1.1 기본 선택자</h3>
+            <div id="select-example" class="demo-area">
+                <p id="para1">ID로 선택할 문단</p>
+                <p class="highlight">클래스로 선택할 문단 1</p>
+                <p class="highlight">클래스로 선택할 문단 2</p>
+                <span>태그로 선택할 요소</span>
+            </div>
+            <button onclick="runSelectorExample()">선택자 예제 실행</button>
+            <div id="selectorOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- DOM 생성과 수정 섹션 -->
+    <div class="section">
+        <h2>2. DOM 요소 생성과 수정</h2>
+        <div class="explanation">
+            JavaScript를 사용하여 동적으로 DOM 요소를 생성하고 수정하는 방법을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>2.1 요소 생성과 추가</h3>
+            <div id="create-example" class="demo-area">
+                <div id="container">여기에 새로운 요소가 추가됩니다.</div>
+            </div>
+            <button onclick="runCreateExample()">요소 생성 예제 실행</button>
+            <div id="createOutput" class="output"></div>
+        </div>
+        <div class="sub-section">
+            <h3>2.2 요소 수정과 삭제</h3>
+            <div id="modify-example" class="demo-area">
+                <p id="modify-text">이 텍스트는 수정될 것입니다.</p>
+                <div id="remove-items">
+                    <p>삭제할 항목 1</p>
+                    <p>삭제할 항목 2</p>
+                </div>
+            </div>
+            <button onclick="runModifyExample()">요소 수정 예제 실행</button>
+            <div id="modifyOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 이벤트 처리 섹션 -->
+    <div class="section">
+        <h2>3. 이벤트 처리</h2>
+        <div class="explanation">
+            DOM 요소의 이벤트를 처리하는 다양한 방법을 알아봅니다.
+            클릭, 키보드, 마우스 이벤트 등을 다룹니다.
+        </div>
+        <div class="sub-section">
+            <h3>3.1 이벤트 리스너</h3>
+            <div id="event-example" class="demo-area">
+                <button id="clickBtn">클릭하세요</button>
+                <input type="text" id="keyInput" placeholder="키를 입력하세요">
+                <div id="mouseArea" style="width: 200px; height: 100px; background: #f0f0f0;">
+                    마우스를 여기에 올려보세요
+                </div>
+            </div>
+            <button onclick="runEventExample()">이벤트 예제 실행</button>
+            <div id="eventOutput" class="output"></div>
+        </div>
+    </div>
+
+    <!-- 스타일 조작 섹션 -->
+    <div class="section">
+        <h2>4. 스타일 조작</h2>
+        <div class="explanation">
+            JavaScript를 사용하여 DOM 요소의 스타일을 동적으로 변경하는 방법을 알아봅니다.
+        </div>
+        <div class="sub-section">
+            <h3>4.1 인라인 스타일과 클래스</h3>
+            <div id="style-example" class="demo-area">
+                <div id="styleTarget" style="padding: 20px; background: #e0e0e0;">
+                    스타일이 변경될 요소
+                </div>
+                <div id="classTarget">
+                    클래스가 토글될 요소
+                </div>
+            </div>
+            <button onclick="runStyleExample()">스타일 예제 실행</button>
+            <div id="styleOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * 출력 함수 - 결과를 화면에 표시
+         * @param {string} outputId - 출력할 div의 ID
+         * @param {string} text - 출력할 텍스트
+         * @param {boolean} isError - 에러 여부 (true면 빨간색으로 표시)
+         */
+        function appendToOutput(outputId, text, isError = false) {
+            const output = document.getElementById(outputId);
+            const line = document.createElement('div');
+            line.style.color = isError ? 'red' : 'black';
+            line.textContent = text;
+            output.appendChild(line);
+        }
+
+        /**
+         * DOM 선택자 예제
+         * 다양한 방법으로 DOM 요소를 선택하는 방법을 보여줍니다.
+         */
+        function runSelectorExample() {
+            const output = document.getElementById('selectorOutput');
+            output.innerHTML = '';
+
+            // ID로 선택
+            const para1 = document.getElementById('para1');
+            appendToOutput('selectorOutput', '1. ID로 선택:');
+            appendToOutput('selectorOutput', `내용: ${para1.textContent}`);
+
+            // 클래스로 선택
+            const highlights = document.getElementsByClassName('highlight');
+            appendToOutput('selectorOutput', '\n2. 클래스로 선택:');
+            Array.from(highlights).forEach((el, i) => {
+                appendToOutput('selectorOutput', `${i + 1}번째 요소: ${el.textContent}`);
+            });
+
+            // 태그로 선택
+            const spans = document.getElementsByTagName('span');
+            appendToOutput('selectorOutput', '\n3. 태그로 선택:');
+            Array.from(spans).forEach((el, i) => {
+                appendToOutput('selectorOutput', `span ${i + 1}: ${el.textContent}`);
+            });
+
+            // querySelector 사용
+            appendToOutput('selectorOutput', '\n4. querySelector 사용:');
+            const firstHighlight = document.querySelector('.highlight');
+            appendToOutput('selectorOutput', `첫 번째 .highlight: ${firstHighlight.textContent}`);
+        }
+
+        /**
+         * DOM 요소 생성 예제
+         * 새로운 요소를 생성하고 문서에 추가하는 방법을 보여줍니다.
+         */
+        function runCreateExample() {
+            const output = document.getElementById('createOutput');
+            output.innerHTML = '';
+            const container = document.getElementById('container');
+            container.innerHTML = '여기에 새로운 요소가 추가됩니다.';
+
+            // 새로운 요소 생성
+            appendToOutput('createOutput', '1. 새로운 요소 생성:');
+            const newElement = document.createElement('div');
+            newElement.textContent = '동적으로 생성된 새로운 요소';
+            newElement.style.color = 'blue';
+            container.appendChild(newElement);
+            appendToOutput('createOutput', '- div 요소가 생성되어 추가됨');
+
+            // 여러 요소 한 번에 추가
+            appendToOutput('createOutput', '\n2. 여러 요소 추가:');
+            const fragment = document.createDocumentFragment();
+            for (let i = 1; i <= 3; i++) {
+                const item = document.createElement('p');
+                item.textContent = `항목 ${i}`;
+                fragment.appendChild(item);
+            }
+            container.appendChild(fragment);
+            appendToOutput('createOutput', '- 3개의 항목이 추가됨');
+        }
+
+        /**
+         * DOM 요소 수정 예제
+         * 기존 요소의 내용과 속성을 수정하는 방법을 보여줍니다.
+         */
+        function runModifyExample() {
+            const output = document.getElementById('modifyOutput');
+            output.innerHTML = '';
+
+            // 텍스트 내용 수정
+            const modifyText = document.getElementById('modify-text');
+            appendToOutput('modifyOutput', '1. 텍스트 수정:');
+            appendToOutput('modifyOutput', `이전 텍스트: ${modifyText.textContent}`);
+            modifyText.textContent = '텍스트가 수정되었습니다!';
+            appendToOutput('modifyOutput', `수정된 텍스트: ${modifyText.textContent}`);
+
+            // 속성 수정
+            appendToOutput('modifyOutput', '\n2. 속성 수정:');
+            modifyText.setAttribute('data-modified', 'true');
+            modifyText.style.color = 'red';
+            appendToOutput('modifyOutput', '- 속성과 스타일이 수정됨');
+
+            // 요소 삭제
+            appendToOutput('modifyOutput', '\n3. 요소 삭제:');
+            const removeItems = document.getElementById('remove-items');
+            const firstItem = removeItems.firstElementChild;
+            if (firstItem) {
+                removeItems.removeChild(firstItem);
+                appendToOutput('modifyOutput', '- 첫 번째 항목이 삭제됨');
+            }
+        }
+
+        /**
+         * 이벤트 처리 예제
+         * 다양한 이벤트를 처리하는 방법을 보여줍니다.
+         */
+        function runEventExample() {
+            const output = document.getElementById('eventOutput');
+            output.innerHTML = '';
+
+            // 클릭 이벤트
+            const clickBtn = document.getElementById('clickBtn');
+            clickBtn.addEventListener('click', () => {
+                appendToOutput('eventOutput', '버튼이 클릭되었습니다!');
+            });
+            appendToOutput('eventOutput', '1. 클릭 이벤트 리스너가 추가됨');
+
+            // 키보드 이벤트
+            const keyInput = document.getElementById('keyInput');
+            keyInput.addEventListener('keyup', (e) => {
+                appendToOutput('eventOutput', `키가 입력됨: ${e.key}`);
+            });
+            appendToOutput('eventOutput', '2. 키보드 이벤트 리스너가 추가됨');
+
+            // 마우스 이벤트
+            const mouseArea = document.getElementById('mouseArea');
+            mouseArea.addEventListener('mouseover', () => {
+                appendToOutput('eventOutput', '마우스가 영역에 진입함');
+            });
+            mouseArea.addEventListener('mouseout', () => {
+                appendToOutput('eventOutput', '마우스가 영역을 벗어남');
+            });
+            appendToOutput('eventOutput', '3. 마우스 이벤트 리스너가 추가됨');
+        }
+
+        /**
+         * 스타일 조작 예제
+         * DOM 요소의 스타일을 동적으로 변경하는 방법을 보여줍니다.
+         */
+        function runStyleExample() {
+            const output = document.getElementById('styleOutput');
+            output.innerHTML = '';
+
+            // 인라인 스타일 변경
+            const styleTarget = document.getElementById('styleTarget');
+            appendToOutput('styleOutput', '1. 인라인 스타일 변경:');
+            styleTarget.style.backgroundColor = '#ff9999';
+            styleTarget.style.color = 'white';
+            styleTarget.style.borderRadius = '5px';
+            appendToOutput('styleOutput', '- 배경색, 텍스트 색상, 테두리 반경이 변경됨');
+
+            // 클래스 조작
+            const classTarget = document.getElementById('classTarget');
+            appendToOutput('styleOutput', '\n2. 클래스 조작:');
+            classTarget.classList.add('highlight-class');
+            appendToOutput('styleOutput', '- highlight-class 추가됨');
+            
+            setTimeout(() => {
+                classTarget.classList.remove('highlight-class');
+                appendToOutput('styleOutput', '- highlight-class 제거됨');
+            }, 2000);
+        }
+    </script>
+
+    <!-- 스타일 정의 -->
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+        .sub-section {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .demo-area {
+            margin: 15px 0;
+            padding: 15px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        .output {
+            background-color: #f5f5f5;
+            padding: 15px;
+            margin-top: 10px;
+            border-radius: 4px;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .explanation {
+            background-color: #e1f5fe;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        h3 {
+            color: #2196F3;
+            margin-top: 20px;
+        }
+        .highlight-class {
+            background-color: #ffeb3b;
+            padding: 10px;
+            transition: all 0.3s ease;
+        }
+        #mouseArea {
+            transition: background-color 0.3s ease;
+        }
+        #mouseArea:hover {
+            background-color: #ddd;
+        }
+    </style>
+</body>
+</html> 

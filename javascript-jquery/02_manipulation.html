@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>jQuery DOM 조작</title>
+<link rel="stylesheet" href="./css/common.css">
+<script src="./js/jquery.min.js"></script>
+<script>
+$(function(){
+    // 1. 내용 변경
+    $("#btn1").click(function(){
+        $("#text1").html("<strong>HTML 변경</strong>");
+        $("#text2").text("텍스트 변경");
+    });
+
+    // 2. 속성 변경
+    $("#btn2").click(function(){
+        $("#image").attr("src", "./images/pic2.jpg");
+        $("#link").attr("href", "https://jquery.com");
+    });
+
+    // 3. 스타일 변경
+    $("#btn3").click(function(){
+        $("#box").css({
+            "background-color": "#ff0",
+            "border": "2px solid #f00"
+        });
+    });
+
+    // 4. DOM 추가/삭제
+    $("#btn4").click(function(){
+        $("#list").append("<li>새로운 항목</li>");
+        $("#list li:first").remove();
+    });
+});
+</script>
+</head>
+<body>
+    <div class="container">
+        <h1>jQuery DOM 조작 예제</h1>
+
+        <!-- 1. 내용 변경 섹션 -->
+        <section class="example-section">
+            <h2>1. 내용 변경</h2>
+            <div class="content-box">
+                <div id="text1" class="text-item">원본 HTML 내용</div>
+                <div id="text2" class="text-item">원본 텍스트 내용</div>
+                <button id="btn1" class="action-btn">내용 변경</button>
+            </div>
+        </section>
+
+        <!-- 2. 속성 변경 섹션 -->
+        <section class="example-section">
+            <h2>2. 속성 변경</h2>
+            <div class="content-box">
+                <div class="image-wrapper">
+                    <img id="image" src="./images/pic1.jpg" alt="이미지" width="300">
+                </div>
+                <div class="link-wrapper">
+                    <a id="link" href="https://example.com" target="_blank">원본 링크</a>
+                </div>
+                <button id="btn2" class="action-btn">속성 변경</button>
+            </div>
+        </section>
+
+        <!-- 3. 스타일 변경 섹션 -->
+        <section class="example-section">
+            <h2>3. 스타일 변경</h2>
+            <div class="content-box">
+                <div id="box" class="style-box">
+                    스타일이 변경될 박스
+                </div>
+                <button id="btn3" class="action-btn">스타일 변경</button>
+            </div>
+        </section>
+
+        <!-- 4. DOM 추가/삭제 섹션 -->
+        <section class="example-section">
+            <h2>4. DOM 추가/삭제</h2>
+            <div class="content-box">
+                <ul id="list" class="dynamic-list">
+                    <li>항목 1</li>
+                    <li>항목 2</li>
+                    <li>항목 3</li>
+                </ul>
+                <button id="btn4" class="action-btn">항목 추가/삭제</button>
+            </div>
+        </section>
+    </div>
+
+    <style>
+        .example-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .example-section h2 {
+            color: #915540;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .content-box {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .text-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            background: #fff;
+            border: 1px solid #ddd;
+        }
+
+        .image-wrapper {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .image-wrapper img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+        }
+
+        .link-wrapper {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .link-wrapper a {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .style-box {
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        .dynamic-list {
+            margin-bottom: 20px;
+        }
+
+        .dynamic-list li {
+            padding: 10px;
+            margin-bottom: 5px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .action-btn {
+            display: block;
+            width: 200px;
+            margin: 0 auto;
+        }
+    </style>
+</body>
+</html>

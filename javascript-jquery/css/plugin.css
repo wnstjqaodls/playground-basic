@@ -1,0 +1,40 @@
+/* bxSlider 스타일 */
+.bx-wrapper {
+    position: relative;
+    margin-bottom: 60px;
+    padding: 0;
+    touch-action: pan-y;
+}
+
+.bx-wrapper img {
+    max-width: 100%;
+    display: block;
+}
+
+.bxslider {
+    margin: 0;
+    padding: 0;
+}
+
+/* 하이라이트 효과 스타일 */
+.highlight-text {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+/* 쿠키 테스트 스타일 */
+.cookie-test {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+#cookieStatus {
+    margin-top: 10px;
+    padding: 10px;
+    background: #e9ecef;
+    border-radius: 4px;
+} 
